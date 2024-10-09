@@ -10,23 +10,23 @@ namespace SistemaGestionBussiness
 {
     public class ProductoVendidoBussiness
     {
-        public static List<ProductoVendidoData> ObtenerProductosVendidos()
+        public List<ProductoVendidoData> ObtenerProductosVendidos()
         {
             return ProductoVendidoDataAccess.ObtenerProductoVendidos();
         }
-        public static ProductoVendidoData ObtenerUnProductoVendido(int id)
+        public ProductoVendidoData ObtenerUnProductoVendido(int id)
         {
             return ProductoVendidoDataAccess.ListarProductoVendido(id);
         }
-        public static ProductoVendidoData CrearProductoVendido(ProductoVendidoData productoVendidoCreado)
+        public ProductoVendidoData CrearProductoVendido(ProductoVendidoData productoVendidoCreado)
         {
             return ProductoVendidoDataAccess.CrearProductoVendido(productoVendidoCreado);
         }
-        public static ProductoVendidoData ModificarProductoVendido(int id, ProductoVendidoData productoVendidoModificado)
+        public ProductoVendidoData ModificarProductoVendido(int id, ProductoVendidoData productoVendidoModificado)
         {
             return ProductoVendidoDataAccess.ModificarProductoVendido(id, productoVendidoModificado);
         }
-        public static ProductoVendidoData EliminarProductoVendido(int id)
+        public ProductoVendidoData EliminarProductoVendido(int id)
         {
             return ProductoVendidoDataAccess.EliminarProductoVendido(id);
         }

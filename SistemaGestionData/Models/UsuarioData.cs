@@ -1,6 +1,7 @@
 ﻿using SistemaGestionData.Contexts;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,29 @@ namespace SistemaGestionData.Models
 {
     public class UsuarioData
     {
+        [Key]
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string NombreUsuario { get; set; }
-        public string Contraseña { get; set; }
-        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "El campo Nombre es requerido.")]
+        [MaxLength(100, ErrorMessage = "El Nombre no puede tener más de 100 caracteres.")]
+        public string Nombre { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El campo Apellido es requerido.")]
+        [MaxLength(100, ErrorMessage = "El Apellido no puede tener más de 100 caracteres.")]
+        public string Apellido { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El campo Nombre de Usuario es requerido.")]
+        [MaxLength(100, ErrorMessage = "El Nombre de Usuario no puede tener más de 100 caracteres.")]
+        public string NombreUsuario { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El campo Contraseña es requerido.")]
+        [MaxLength(100, ErrorMessage = "La Contraseña no puede tener más de 100 caracteres.")]
+        [MinLength(5, ErrorMessage = "La Contraseña debe tener al menos 5 caracteres.")]
+        public string Contraseña { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El campo Email es requerido.")]
+        [MaxLength(100, ErrorMessage = "El Email no puede tener más de 100 caracteres.")]
+        [EmailAddress(ErrorMessage = "El Email no es una dirección de correo electrónico válida.")]
+        public string? Email { get; set; } = string.Empty;
     }
 }

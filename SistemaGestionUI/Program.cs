@@ -1,20 +1,21 @@
 ﻿using SistemaGestionBussiness;
 
-var obtenerTodosLosProductos = ProductoBussiness.GetProductos();
+var productoBussiness = new ProductoBussiness();
+
+var obtenerTodosLosProductos = productoBussiness.GetProductos();
 
 foreach(var it in obtenerTodosLosProductos)
 {
     Console.WriteLine("descripcion del producto id : " + it.Id + ", " + it.Descripcion);
 }
 
-var obtenerUnProducto = ProductoBussiness.ObtenerUnProducto(5);
-Console.WriteLine("producto a buscar : " + obtenerUnProducto);
+var obtenerUnProducto = productoBussiness.ObtenerUnProducto(5);
 
-if(obtenerUnProducto != null)
+if (obtenerUnProducto != null)
 {
     obtenerUnProducto.Descripcion = "Producto modificado";
 
-    ProductoBussiness.ModificarUnProducto(obtenerUnProducto.Id, obtenerUnProducto);
+    productoBussiness.ModificarUnProducto(obtenerUnProducto.Id, obtenerUnProducto);
 
     Console.WriteLine("Producto modificado con descripción: " + obtenerUnProducto.Descripcion);
 }

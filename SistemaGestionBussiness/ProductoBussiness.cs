@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 
 namespace SistemaGestionBussiness
 {
-    public static class ProductoBussiness
+    public class ProductoBussiness
     {
-        public static List<ProductoData> GetProductos()
+        public List<ProductoData> GetProductos()
         {
             return ProductoDataAccess.ListarProductos();
         }        
-        public static ProductoData? ObtenerUnProducto(int id)
+        public ProductoData? ObtenerUnProducto(int id)
         {
             return ProductoDataAccess.ObtenerProducto(id);
         }    
-        public static ProductoData CrearUnProducto(ProductoData producto)
+        public ProductoData CrearUnProducto(ProductoData producto)
         {
             return ProductoDataAccess.CrearProducto(producto);
         }     
-        public static ProductoData ModificarUnProducto(int id, ProductoData producto)
+        public ProductoData ModificarUnProducto(int id, ProductoData producto)
         {
             return ProductoDataAccess.ModificarProducto(id, producto);
         }        
-        public static ProductoData EliminarUnProducto(int id)
+        public ProductoData EliminarUnProducto(int id)
         {
             return ProductoDataAccess.EliminarProducto(id);
         }
