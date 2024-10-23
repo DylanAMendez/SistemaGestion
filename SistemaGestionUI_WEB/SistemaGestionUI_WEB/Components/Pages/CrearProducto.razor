@@ -1,0 +1,96 @@
+﻿@page "/CrearProducto"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h3>Crear Producto</h3>
+
+<EditForm Model="@nuevoProducto" OnValidSubmit="CrearNuevoProducto" class="flex-column d-flex text-center">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <InputText id="descripcion" @bind-Value="@nuevoProducto.Descripcion" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.Descripcion)" />
+    </div>
+
+    <div class="form-group">
+        <label for="precioCompra">Precio Compra:</label>
+        <InputNumber id="precioCompra" @bind-Value="@nuevoProducto.PrecioCompra" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.PrecioCompra)" />
+    </div>
+
+    <div class="form-group">
+        <label for="precioVenta">Precio Venta:</label>
+        <InputNumber id="precioVenta" @bind-Value="@nuevoProducto.PrecioVenta" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.PrecioVenta)" />
+    </div>
+
+    <div class="form-group">
+        <label for="stock">Stock:</label>
+        <InputNumber id="stock" @bind-Value="@nuevoProducto.Stock" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.Stock)" />
+    </div>
+
+    <div class="form-group">
+        <label for="totalProducto">Total Producto:</label>
+        <InputNumber id="totalProducto" @bind-Value="@nuevoProducto.TotalProducto" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.TotalProducto)" />
+    </div>
+
+    <div class="form-group">
+        <label for="categoria">Categoría:</label>
+        <InputText id="categoria" @bind-Value="@nuevoProducto.Categoria" class="form-control" />
+        <ValidationMessage For="@(() => nuevoProducto.Categoria)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear Producto</button>
+</EditForm>
+
+@if (!string.IsNullOrWhiteSpace(mensajeError))
+{
+    <p class="text-danger">@mensajeError</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(mensajeExito))
+{
+    <p class="text-success">@mensajeExito</p>
+}
+
+@code {
+    private ProductoData nuevoProducto = new ProductoData();
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    [Inject]
+    private HttpClient Http { get; set; }
+    [Inject]
+    private NavigationManager navegar { get; set; }
+
+    private async Task CrearNuevoProducto()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://localhost:5106/api/Productos", nuevoProducto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                mensajeExito = "Producto creado con éxito!";
+                mensajeError = "";
+
+                await JS.InvokeVoidAsync("alert", "Producto creado con éxito!");
+
+                nuevoProducto = new ProductoData();
+            }
+            else
+            {
+                mensajeError = "Hubo un error al crear el producto, por favor verifica los datos.";
+                mensajeExito = "";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error: {ex.Message}";
+            mensajeExito = "";
+        }
+    }
+}

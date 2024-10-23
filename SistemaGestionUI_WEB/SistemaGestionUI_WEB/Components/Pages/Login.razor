@@ -1,0 +1,96 @@
+﻿@page "/Login"
+@layout LoginLayout
+@rendermode InteractiveServer
+
+<h3>Login</h3>
+
+<div class="flex-column d-flex text-center" style="align-items:center;">
+    <div>
+        <label for="nombre">Nombre de Usuario o Correo:</label>
+        <input id="nombre" type="text" @bind="nombreDeUsuarioOMail" />
+    </div>
+
+    <div>
+        <div>
+            <label style="color:orangered">@UsuarioOMailIncorrecto</label>
+        </div>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="password">Contraseña:</label>
+        <input id="password" type="password" @bind="contraseña" />
+    </div>
+
+    <button type="button" class="btn btn-primary" @onclick="GuardarDatos">Iniciar Sesión</button>
+</div>
+
+@if (datosGuardados)
+{
+    <p>Datos del usuario obtenidos correctamente:</p>
+    <p>Nombre: @usuarioData.Nombre</p>
+    <p>Apellido: @usuarioData.Apellido</p>
+    <p>Nombre de Usuario: @usuarioData.NombreUsuario</p>
+    <p>Email: @usuarioData.Email</p>
+}
+
+@code
+{
+    string nombreDeUsuarioOMail = "";
+    string contraseña = "";
+    string UsuarioOMailIncorrecto = "";
+    private bool datosGuardados = false;
+
+    private UsuarioData usuarioData = new UsuarioData();
+
+    [Inject]
+    private HttpClient Http { get; set; }
+    [Inject]
+    NavigationManager Navegar { get; set; }
+
+    private async Task GuardarDatos()
+    {
+        try
+        {
+            Console.WriteLine("Enviando solicitud para obtener datos del usuario...");
+
+            var res = await Http.GetStringAsync($"http://localhost:5106/usuario/{nombreDeUsuarioOMail}");
+
+            usuarioData = JsonSerializer.Deserialize<UsuarioData>(res);
+
+            if (usuarioData != null)
+            {
+                if (contraseña == usuarioData.Contraseña)
+                {
+                    datosGuardados = true;
+                    Console.WriteLine($"Usuario: {usuarioData.Nombre}, Email: {usuarioData.Email}");
+
+                    //redirigir a la pagina principal
+                    Navegar.NavigateTo($"/inicio/{usuarioData.Id}");
+
+                }
+                else
+                {
+                    Console.WriteLine("contraseña incorrecta");
+                    if (nombreDeUsuarioOMail.Contains("@"))
+                    {
+                        UsuarioOMailIncorrecto = "Mail Incorrecto!";
+                    }
+                    else
+                    {
+                        UsuarioOMailIncorrecto = "Usuario Incorrecto!";
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: El usuario no fue encontrado.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error durante el login: {ex.Message}");
+        }
+    }
+}

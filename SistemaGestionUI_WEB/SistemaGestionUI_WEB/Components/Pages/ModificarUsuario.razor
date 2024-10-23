@@ -1,0 +1,73 @@
+﻿@page "/ModificarUsuario/{IDUsuario:int}"
+@rendermode InteractiveServer
+
+<h3>Modificar Usuario</h3>
+
+<EditForm Model="@usuarioData" OnValidSubmit="GuardarCambios" class="flex-column d-flex text-center" FormName="modificarUsuarioForm">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="nombre">Nombre:</label>
+        <InputText id="nombre" @bind-Value="@usuarioData.Nombre" />
+    </div>
+    <div>
+        <label for="apellido">Apellido:</label>
+        <InputText id="apellido" @bind-Value="@usuarioData.Apellido" />
+    </div>
+    <div>
+        <label for="nombreUsuario">Nombre de Usuario:</label>
+        <InputText id="nombreUsuario" @bind-Value="@usuarioData.NombreUsuario" />
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="@usuarioData.Email" />
+    </div>
+    <div>
+        <label for="contraseña">Contraseña:</label>
+        <InputText id="contraseña" type="password" @bind-Value="@usuarioData.Contraseña" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</EditForm>
+
+@if (datosGuardados)
+{
+    <p>Datos del usuario modificados correctamente.</p>
+}
+
+@code {
+    [Parameter]
+    public int IDUsuario { get; set; }
+
+    private UsuarioData usuarioData = new UsuarioData();
+    private bool datosGuardados = false;
+
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obtener datos del usuario usando la API
+        var res = await Http.GetStringAsync($"http://localhost:5106/api/usuario/{IDUsuario}");
+        usuarioData = JsonSerializer.Deserialize<UsuarioData>(res);
+    }
+
+    private async Task GuardarCambios()
+    {
+        // Lógica para guardar cambios en la API
+        var json = JsonSerializer.Serialize(usuarioData);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await Http.PutAsync($"http://localhost:5106/api/Usuario/{IDUsuario}", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            datosGuardados = true;
+        }
+        else
+        {
+            datosGuardados = false;
+            Console.WriteLine("Error al modificar los datos del usuario.");
+        }
+    }
+}

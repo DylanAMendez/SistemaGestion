@@ -1,0 +1,94 @@
+﻿@page "/CrearUsuario"
+@layout LoginLayout
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h3>Crear Usuario</h3>
+
+<EditForm Model="@nuevoUsuario" OnValidSubmit="CrearNuevoUsuario" class="flex-column d-flex text-center">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <InputText id="nombre" @bind-Value="@nuevoUsuario.Nombre" class="form-control" />
+        <ValidationMessage For="@(() => nuevoUsuario.Nombre)" />
+    </div>
+
+    <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <InputText id="apellido" @bind-Value="@nuevoUsuario.Apellido" class="form-control" />
+        <ValidationMessage For="@(() => nuevoUsuario.Apellido)" />
+    </div>
+
+    <div class="form-group">
+        <label for="nombreUsuario">Nombre de Usuario:</label>
+        <InputText id="nombreUsuario" @bind-Value="@nuevoUsuario.NombreUsuario" class="form-control" />
+        <ValidationMessage For="@(() => nuevoUsuario.NombreUsuario)" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="@nuevoUsuario.Email" class="form-control" />
+        <ValidationMessage For="@(() => nuevoUsuario.Email)" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <InputText id="password" @bind-Value="@nuevoUsuario.Contraseña" type="password" class="form-control" />
+        <ValidationMessage For="@(() => nuevoUsuario.Contraseña)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+</EditForm>
+
+@if (mensajeError != "")
+{
+    <p class="text-danger">@mensajeError</p>
+}
+
+@if (mensajeExito != "")
+{
+    <p class="text-success">@mensajeExito</p>
+}
+
+@code {
+    private UsuarioData nuevoUsuario = new UsuarioData();
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    [Inject]
+    private HttpClient Http { get; set; }
+    [Inject]
+    NavigationManager navegar { get; set; }
+
+    private async Task CrearNuevoUsuario()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://localhost:5106/api/Usuario", nuevoUsuario);
+
+            if (response.IsSuccessStatusCode)
+            {
+                mensajeExito = "Usuario creado con éxito! Redirigiendo a la pagina de Login.";
+                mensajeError = "";
+
+                await Task.Delay(500);
+
+                await JS.InvokeVoidAsync("alert","Usuario creado con éxito! Redirigiendo a la pagina de Login.");
+
+                navegar.NavigateTo("/Login");
+            }
+            else
+            {
+                mensajeError = "Hubo un error al crear el usuario, favor de chequear los datos.";
+                mensajeExito = "";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error: {ex.Message}";
+        }
+    }
+
+
+}

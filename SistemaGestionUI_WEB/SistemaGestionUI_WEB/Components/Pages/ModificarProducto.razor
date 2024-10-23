@@ -1,0 +1,113 @@
+﻿@page "/ModificarProducto/{IDProducto:int}"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h3>Modificar Producto</h3>
+
+<EditForm Model="@modificarProducto" OnValidSubmit="GuardarCambios" class="flex-column d-flex text-center">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <InputText id="descripcion" @bind-Value="@modificarProducto.Descripcion" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.Descripcion)" />
+    </div>
+
+    <div class="form-group">
+        <label for="precioCompra">Precio Compra:</label>
+        <InputNumber id="precioCompra" @bind-Value="@modificarProducto.PrecioCompra" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.PrecioCompra)" />
+    </div>
+
+    <div class="form-group">
+        <label for="precioVenta">Precio Venta:</label>
+        <InputNumber id="precioVenta" @bind-Value="@modificarProducto.PrecioVenta" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.PrecioVenta)" />
+    </div>
+
+    <div class="form-group">
+        <label for="stock">Stock:</label>
+        <InputNumber id="stock" @bind-Value="@modificarProducto.Stock" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.Stock)" />
+    </div>
+
+    <div class="form-group">
+        <label for="totalProducto">Total Producto:</label>
+        <InputNumber id="totalProducto" @bind-Value="@modificarProducto.TotalProducto" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.TotalProducto)" />
+    </div>
+
+    <div class="form-group">
+        <label for="categoria">Categoría:</label>
+        <InputText id="categoria" @bind-Value="@modificarProducto.Categoria" class="form-control" />
+        <ValidationMessage For="@(() => modificarProducto.Categoria)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</EditForm>
+
+@if (!string.IsNullOrWhiteSpace(mensajeError))
+{
+    <p class="text-danger">@mensajeError</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(mensajeExito))
+{
+    <p class="text-success">@mensajeExito</p>
+}
+
+@code {
+
+    [Parameter]
+    public int IDProducto { get; set; }
+
+    private ProductoData modificarProducto = new ProductoData();
+    private string mensajeError = "";
+    private string mensajeExito = "";
+
+    [Inject]
+    private HttpClient Http { get; set; }
+    [Inject]
+    private NavigationManager navegar { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync($"http://localhost:5106/api/Productos/{IDProducto}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            modificarProducto = JsonSerializer.Deserialize<ProductoData>(responseContent);
+            mensajeExito = "Producto modificado con exito!";
+        }
+        else
+        {
+            // await JS.InvokeVoidAsync("alert", $"Error al obtener el producto: {response.StatusCode}");
+        }
+    }
+
+    private async Task GuardarCambios()
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(modificarProducto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await Http.PutAsync($"http://localhost:5106/api/Productos/{IDProducto}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                await JS.InvokeVoidAsync("alert", $"Producto modificado con exito! ID: {IDProducto}");
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", $"Error al modificar los datos del Producto ID: {IDProducto}");
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error: {ex.Message}";
+            mensajeExito = "";
+        }
+    }
+}

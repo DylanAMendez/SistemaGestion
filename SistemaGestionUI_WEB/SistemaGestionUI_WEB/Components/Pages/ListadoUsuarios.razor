@@ -1,0 +1,65 @@
+﻿@page "/ListadoUsuarios"
+@rendermode InteractiveServer
+
+<h3>ListadoUsuarios</h3>
+
+@if (usuarioDataTodos.Any())
+{
+    <div>
+        @foreach (var usuario in usuarioDataTodos)
+        {
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="usuario-card">
+                    <p><strong>Nombre:</strong> @usuario.Nombre</p>
+                    <p><strong>Apellido:</strong> @usuario.Apellido</p>
+                    <p><strong>Nombre de Usuario:</strong> @usuario.NombreUsuario</p>
+                </div>
+                <div style="gap: 90px;display: flex;">
+                    <button class="btn-primary" @onclick="() => ModificarDatosDelUsuario(usuario.Id)">Modificar</button>
+                    <button class="btn-danger" @onclick="() => EliminarUsuario(usuario.Id)">Eliminar</button>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+}
+else
+{
+    <p>No hay usuarios disponibles.</p>
+}
+
+@code
+{
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    [Inject]
+    NavigationManager Navegar { get; set; }
+
+    List<UsuarioData> usuarioDataTodos = new List<UsuarioData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarUsuarios();
+    }
+
+    private async Task CargarUsuarios()
+    {
+        var todosLosUsuarios = await Http.GetStringAsync("http://localhost:5106/api/Usuario");
+        usuarioDataTodos = JsonSerializer.Deserialize<List<UsuarioData>>(todosLosUsuarios);
+    }
+
+    public void ModificarDatosDelUsuario(int idUsuario)
+    {
+        Navegar.NavigateTo($"/ModificarUsuario/{idUsuario}");
+    }
+
+    public async Task EliminarUsuario(int idUsuario)
+    {
+        var response = await Http.DeleteAsync($"http://localhost:5106/api/Usuario/{idUsuario}");
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarUsuarios();
+        }
+    }
+}

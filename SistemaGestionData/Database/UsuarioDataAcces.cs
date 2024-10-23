@@ -41,6 +41,18 @@ namespace SistemaGestionData.Database
             }
         }
 
+        public static UsuarioData? ListarUsuariosQueContenganFiltro(string stringABuscar)
+        {
+            try
+            {
+                return _context.Usuarios.Where(k => k.NombreUsuario.Contains(stringABuscar) || k.Email.Contains(stringABuscar)).FirstOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static UsuarioData CrearUsuario(UsuarioData nuevoUsuario)
         {
             try

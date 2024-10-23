@@ -1,0 +1,68 @@
+﻿@page "/ListadoProductos"
+@rendermode InteractiveServer
+
+<h3>ListadoUsuarios</h3>
+
+@if (lsProductos.Any())
+{
+    <div>
+        @foreach (var producto in lsProductos)
+        {
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="usuario-card">
+                    <p><strong>Descripcion:</strong> @producto.Descripcion</p>
+                    <p><strong>Precio Compra:</strong> @producto.PrecioCompra</p>
+                    <p><strong>Precio Venta:</strong> @producto.PrecioVenta</p>
+                    <p><strong>Stock:</strong> @producto.Stock</p>
+                    <p><strong>Total Producto:</strong> @producto.TotalProducto</p>
+                    <p><strong>Categoria:</strong> @producto.Categoria</p>
+                </div>
+                <div style="gap: 90px;display: flex;">
+                    <button class="btn-primary" @onclick="() => ModificarDatosDelProducto(producto.Id)">Modificar</button>
+                    <button class="btn-danger" @onclick="() => EliminarProducto(producto.Id)">Eliminar</button>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+}
+else
+{
+    <p>No hay productos disponibles.</p>
+}
+
+@code
+{
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    [Inject]
+    NavigationManager Navegar { get; set; }
+
+    List<ProductoData> lsProductos = new List<ProductoData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProductos();
+    }
+
+    private async Task CargarProductos()
+    {
+        var todosLosProductos = await Http.GetStringAsync("http://localhost:5106/api/Productos");
+        lsProductos = JsonSerializer.Deserialize<List<ProductoData>>(todosLosProductos);
+    }
+
+    public void ModificarDatosDelProducto(int idProducto)
+    {
+        Navegar.NavigateTo($"/ModificarProducto/{idProducto}");
+    }
+
+    public async Task EliminarProducto(int idProducto)
+    {
+        var response = await Http.DeleteAsync($"http://localhost:5106/api/Productos/{idProducto}");
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarProductos();
+        }
+    }
+}

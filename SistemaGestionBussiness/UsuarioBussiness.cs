@@ -17,7 +17,12 @@ namespace SistemaGestionBussiness
         public UsuarioData ObtenerUnUsuario(int id)
         {
             return UsuarioDataAcces.ListarUsuarios(id);
-        }      
+        }
+        public UsuarioData ListarUsuariosQueContenganFiltro(string usuarioABuscar)
+        {
+            return UsuarioDataAcces.ListarUsuariosQueContenganFiltro(usuarioABuscar);
+        }
+
         public UsuarioData ModificarUsuario(int id, UsuarioData usuarioData)
         {
             return UsuarioDataAcces.ModificarUsuario(id, usuarioData);

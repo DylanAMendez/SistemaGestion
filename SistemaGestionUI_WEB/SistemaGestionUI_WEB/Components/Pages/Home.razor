@@ -1,0 +1,34 @@
+﻿@page "/inicio/{IDUsuario:int}"
+
+<PageTitle>Home</PageTitle>
+
+
+@if (mensajeDeBienvenida == "")
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1>Hello, @mensajeDeBienvenida!</h1>
+}
+
+Welcome to your new app.
+
+
+
+
+@code {
+
+    [Parameter]
+    public int IDUsuario { get; set; }
+
+    string mensajeDeBienvenida = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+
+        mensajeDeBienvenida = "Hola bienvenido";
+    }
+}

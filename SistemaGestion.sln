@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaGestionBussiness", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaGestionUI", "SistemaGestionUI\SistemaGestionUI.csproj", "{8D178A16-77AF-45DD-A739-F25E304D2FDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemasGestionApi", "SistemasGestionApi\SistemasGestionApi.csproj", "{E98ED7C8-2427-4527-882D-94CF26F49608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemasGestionApi", "SistemasGestionApi\SistemasGestionApi.csproj", "{E98ED7C8-2427-4527-882D-94CF26F49608}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SistemaGestionUI_WEB", "SistemaGestionUI_WEB\SistemaGestionUI_WEB\SistemaGestionUI_WEB.csproj", "{5FF47551-187A-4918-96A1-3E5065ABA448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,8 +41,15 @@ Global
 		{E98ED7C8-2427-4527-882D-94CF26F49608}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E98ED7C8-2427-4527-882D-94CF26F49608}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E98ED7C8-2427-4527-882D-94CF26F49608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF47551-187A-4918-96A1-3E5065ABA448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF47551-187A-4918-96A1-3E5065ABA448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF47551-187A-4918-96A1-3E5065ABA448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF47551-187A-4918-96A1-3E5065ABA448}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98266291-C2EB-450A-9EF4-42C7EB329489}
 	EndGlobalSection
 EndGlobal

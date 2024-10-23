@@ -38,6 +38,19 @@ namespace SistemasGestionApi.Controllers
             return usuario;
         }
 
+        [HttpGet("/usuario/{nombreDeUsuarioOMail}")]
+        public ActionResult<UsuarioData> GetUnUsuarioPorNombreDeUsuario(string nombreDeUsuarioOMail)
+        {
+            var usuario = _usuarioBussiness.ListarUsuariosQueContenganFiltro(nombreDeUsuarioOMail);
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+
+            return usuario;
+        }
+
         [HttpPost]
         public ActionResult<UsuarioData> CrearUsuario([FromBody] UsuarioData usuario)
         {

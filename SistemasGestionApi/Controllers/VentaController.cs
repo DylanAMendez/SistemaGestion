@@ -49,7 +49,7 @@ namespace SistemasGestionApi.Controllers
 
             foreach (var productoVendido in productosVendidos)
             {
-                productoVendido.IdVenta = ventaCreada.Id;
+                //productoVendido.IdVenta = ventaCreada.Id;
 
                 _productoVendidoBussiness.CrearProductoVendido(productoVendido);
 
