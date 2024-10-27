@@ -4,47 +4,62 @@
 
 <h3>Crear Producto</h3>
 
-<EditForm Model="@nuevoProducto" OnValidSubmit="CrearNuevoProducto" class="flex-column d-flex text-center">
+<EditForm Model="@nuevoProducto" OnValidSubmit="CrearNuevoProducto" class="flex-column d-flex text-center" style="align-items: center; text-align:center;">
     <DataAnnotationsValidator />
 
-    <div class="form-group">
-        <label for="descripcion">Descripción:</label>
-        <InputText id="descripcion" @bind-Value="@nuevoProducto.Descripcion" class="form-control" />
+    <div class="form-group" style="display:flex; flex-direction:column; align-items: center;">
+        <label style="border-bottom: solid;" for="descripcion">Descripción:</label>
+        <InputText id="descripcion" @bind-Value="@nuevoProducto.Descripcion" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.Descripcion)" />
     </div>
 
+    <br />
+
     <div class="form-group">
-        <label for="precioCompra">Precio Compra:</label>
-        <InputNumber id="precioCompra" @bind-Value="@nuevoProducto.PrecioCompra" class="form-control" />
+        <label style="border-bottom: solid;" for="precioCompra">Precio Compra:</label>
+        <InputNumber id="precioCompra" @bind-Value="@nuevoProducto.PrecioCompra" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.PrecioCompra)" />
     </div>
 
+    <br />
+
     <div class="form-group">
-        <label for="precioVenta">Precio Venta:</label>
-        <InputNumber id="precioVenta" @bind-Value="@nuevoProducto.PrecioVenta" class="form-control" />
+        <label style="border-bottom: solid;" for="precioVenta">Precio Venta:</label>
+        <InputNumber id="precioVenta" @bind-Value="@nuevoProducto.PrecioVenta" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.PrecioVenta)" />
     </div>
 
+    <br />
+
     <div class="form-group">
-        <label for="stock">Stock:</label>
-        <InputNumber id="stock" @bind-Value="@nuevoProducto.Stock" class="form-control" />
+        <label style="border-bottom: solid;" for="stock">Stock:</label>
+        <InputNumber id="stock" @bind-Value="@nuevoProducto.Stock" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.Stock)" />
     </div>
 
+    <br />
+
     <div class="form-group">
-        <label for="totalProducto">Total Producto:</label>
-        <InputNumber id="totalProducto" @bind-Value="@nuevoProducto.TotalProducto" class="form-control" />
+        <label style="border-bottom: solid;" for="totalProducto">Total Producto:</label>
+        <InputNumber id="totalProducto" @bind-Value="@nuevoProducto.TotalProducto" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.TotalProducto)" />
     </div>
 
+    <br />
+
     <div class="form-group">
-        <label for="categoria">Categoría:</label>
-        <InputText id="categoria" @bind-Value="@nuevoProducto.Categoria" class="form-control" />
+        <label style="border-bottom: solid;" for="categoria">Categoría:</label>
+        <InputText id="categoria" @bind-Value="@nuevoProducto.Categoria" class="form-control" style="width:400px; margin-top:10px;" />
         <ValidationMessage For="@(() => nuevoProducto.Categoria)" />
     </div>
 
+    <br />
+    <br />
+
     <button type="submit" class="btn btn-primary">Crear Producto</button>
 </EditForm>
+
+<br />
 
 @if (!string.IsNullOrWhiteSpace(mensajeError))
 {

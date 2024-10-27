@@ -1,0 +1,56 @@
+﻿@page "/TraerVentas"
+@rendermode InteractiveServer
+
+
+<h3 style="display:flex; justify-content: center;">Ventas</h3>
+
+@if (lsVentaData.Any())
+{
+    <div>
+        @foreach (var venta in lsVentaData)
+        {
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="usuario-card">
+                    <p style="color:snow;"><strong style="color:paleturquoise;">Comentario:</strong> @venta.comentario</p>
+                </div>
+
+                <div style="gap: 90px;display: flex;">
+                    <button class="btn-danger" @onclick="() => EliminarVenta(venta.Id)">Eliminar</button>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+}
+else
+{
+    <p>No hay ventas disponibles.</p>
+}
+
+@code
+{
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    List<VentaData> lsVentaData = new List<VentaData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarVentas();
+    }
+
+    private async Task CargarVentas()
+    {
+        var todasLasVentas = await Http.GetStringAsync("http://localhost:5106/api/Venta");
+        lsVentaData = JsonSerializer.Deserialize<List<VentaData>>(todasLasVentas);
+    }
+
+    public async Task EliminarVenta(int idVenta)
+    {
+        var response = await Http.DeleteAsync($"http://localhost:5106/api/Venta/{idVenta}");
+        if (response.IsSuccessStatusCode)
+        {
+            await CargarVentas();
+        }
+    }
+}

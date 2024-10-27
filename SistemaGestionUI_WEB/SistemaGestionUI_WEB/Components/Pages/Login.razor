@@ -2,11 +2,14 @@
 @layout LoginLayout
 @rendermode InteractiveServer
 
+
 <h3>Login</h3>
 
+ <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
 <div class="flex-column d-flex text-center" style="align-items:center;">
-    <div>
-        <label for="nombre">Nombre de Usuario o Correo:</label>
+    <div style="display: flex;flex-direction: column;">
+        <label style="border-bottom: solid; margin-bottom:10px;" for="nombre">Nombre de Usuario o Correo:</label>
         <input id="nombre" type="text" @bind="nombreDeUsuarioOMail" />
     </div>
 
@@ -18,12 +21,17 @@
 
     <br>
 
-    <div>
-        <label for="password">Contraseña:</label>
+    <div style="display: flex;flex-direction: column;">
+        <label style="border-bottom: solid;  margin-bottom:10px;" for="password">Contraseña:</label>
         <input id="password" type="password" @bind="contraseña" />
     </div>
 
+    <br /><br /><br /><br />
+
     <button type="button" class="btn btn-primary" @onclick="GuardarDatos">Iniciar Sesión</button>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
 </div>
 
 @if (datosGuardados)

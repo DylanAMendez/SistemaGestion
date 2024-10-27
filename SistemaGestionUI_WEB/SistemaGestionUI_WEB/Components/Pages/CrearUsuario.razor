@@ -5,40 +5,63 @@
 
 <h3>Crear Usuario</h3>
 
-<EditForm Model="@nuevoUsuario" OnValidSubmit="CrearNuevoUsuario" class="flex-column d-flex text-center">
+<EditForm Model="@nuevoUsuario" OnValidSubmit="CrearNuevoUsuario" class="flex-column d-flex text-center" style="align-items: center; text-align:center;">
     <DataAnnotationsValidator />
 
+    <br />
+    <br />
+
+
     <div class="form-group">
-        <label for="nombre">Nombre:</label>
+        <label style="border-bottom: solid; margin-bottom:10px;" for="nombre">Nombre:</label>
         <InputText id="nombre" @bind-Value="@nuevoUsuario.Nombre" class="form-control" />
         <ValidationMessage For="@(() => nuevoUsuario.Nombre)" />
     </div>
 
+    <br />
+    <br />
+
     <div class="form-group">
-        <label for="apellido">Apellido:</label>
+        <label style="border-bottom: solid; margin-bottom:10px;" for="apellido">Apellido:</label>
         <InputText id="apellido" @bind-Value="@nuevoUsuario.Apellido" class="form-control" />
         <ValidationMessage For="@(() => nuevoUsuario.Apellido)" />
     </div>
 
+
+    <br />
+    <br />
+
     <div class="form-group">
-        <label for="nombreUsuario">Nombre de Usuario:</label>
+        <label style="border-bottom: solid; margin-bottom:10px;" for="nombreUsuario">Nombre de Usuario:</label>
         <InputText id="nombreUsuario" @bind-Value="@nuevoUsuario.NombreUsuario" class="form-control" />
         <ValidationMessage For="@(() => nuevoUsuario.NombreUsuario)" />
     </div>
 
+    <br />
+    <br />
+
     <div class="form-group">
-        <label for="email">Email:</label>
+        <label style="border-bottom: solid;margin-bottom:10px;" for="email">Email:</label>
         <InputText id="email" @bind-Value="@nuevoUsuario.Email" class="form-control" />
         <ValidationMessage For="@(() => nuevoUsuario.Email)" />
     </div>
 
+    <br />
+    <br />
+
     <div class="form-group">
-        <label for="password">Contraseña:</label>
+        <label style="border-bottom: solid;margin-bottom:10px;" for="password">Contraseña:</label>
         <InputText id="password" @bind-Value="@nuevoUsuario.Contraseña" type="password" class="form-control" />
         <ValidationMessage For="@(() => nuevoUsuario.Contraseña)" />
     </div>
 
+    <br />
+    <br />
+    <br />
+    <br />
+
     <button type="submit" class="btn btn-primary">Crear Usuario</button>
+
 </EditForm>
 
 @if (mensajeError != "")
@@ -50,6 +73,15 @@
 {
     <p class="text-success">@mensajeExito</p>
 }
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
 
 @code {
     private UsuarioData nuevoUsuario = new UsuarioData();

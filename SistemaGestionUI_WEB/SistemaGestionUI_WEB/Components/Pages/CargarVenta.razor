@@ -1,5 +1,144 @@
-﻿<h3>CargarVentasss</h3>
+﻿@page "/CargarVenta/{IDUsuario:int}"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h3>Cargar Ventas</h3>
+
+<br />
+
+<EditForm Model="@oVentaData" OnValidSubmit="CrearNuevaVenta" class="flex-column d-flex text-center" style="color: paleturquoise;">
+    <DataAnnotationsValidator />
+
+    <div class="form-group" style="display: flex; align-items: center; flex-direction: column;">
+        <label style="border-bottom: solid; margin-bottom:10px;" for="comentario">Comentario:</label>
+        <InputText id="comentario" @bind-Value="@oVentaData.comentario" class="form-control" style="width:400px;" />
+        <ValidationMessage For="@(() => oVentaData.comentario)" />
+    </div>
+
+    <br />
+    <br />
+
+    <h4 style="color:orange;">Elija los productos que desea vender</h4>
+
+    <br />
+
+    @foreach (var productoVendido in productosVendidos)
+    {
+        <div class="form-group" style="display: flex; align-items: center; gap: 100px; justify-content: center;">
+            <label style="border-bottom: solid;">Producto:</label>
+            <InputSelect @bind-Value="productoVendido.IdProducto" class="form-control" style="width: 400px;">
+                @foreach (var producto in lsProductos)
+                {
+                    <option value="@producto.Id">@producto.Descripcion</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => productoVendido.IdProducto)" />
+
+            <label style="border-bottom: solid;">Cantidad:</label>
+            <InputNumber @bind-Value="productoVendido.stock" class="form-control" min="1" style="width: 70px;" />
+            <ValidationMessage For="@(() => productoVendido.stock)" />
+        </div>
+    }
+
+    <br />
+    <br />
+
+    <div style="display:flex; flex-direction:column; align-items: center;">
+
+        <button type="button" class="btn btn-secondary" @onclick="AgregarProductoVendido">Agregar otro producto</button>
+
+        <button type="submit" class="btn btn-primary mt-3">Cargar Venta</button>
+
+        <button type="button" class="btn btn-success mt-5" @onclick="CrearNuevaVenta">Confirmar</button>
+
+</div>
+
+</EditForm>
+
+<br />
+
+@if (!string.IsNullOrWhiteSpace(mensajeError))
+{
+    <p style="text-align:center;" class="text-danger">@mensajeError</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(mensajeExito))
+{
+    <p style="text-align:center;" class="text-success">@mensajeExito</p>
+}
 
 @code {
+    [Parameter]
+    public int IDUsuario { get; set; }
 
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    VentaData oVentaData = new VentaData();
+    List<ProductoData> lsProductos = new List<ProductoData>();
+    List<ProductoVendidoData> productosVendidos = new List<ProductoVendidoData>();
+
+    string mensajeError = "";
+    string mensajeExito = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProductos();
+        AgregarProductoVendido(); // Inicializamos al menos un producto vendido al iniciar
+    }
+
+    private async Task CargarProductos()
+    {
+        try
+        {
+            var todosLosProductos = await Http.GetStringAsync("http://localhost:5106/api/Productos");
+            lsProductos = JsonSerializer.Deserialize<List<ProductoData>>(todosLosProductos);
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al cargar productos: {ex.Message}";
+        }
+    }
+
+    private void AgregarProductoVendido()
+    {
+        productosVendidos.Add(new ProductoVendidoData()); // Agregamos un nuevo producto vendido vacío
+    }
+
+    private async Task CrearNuevaVenta()
+    {
+        try
+        {
+            // Asignamos el ID del usuario a la venta
+            oVentaData.IdUsuario = IDUsuario;
+
+            // Asignamos la lista de productos vendidos
+            oVentaData.ProductosVendidos = productosVendidos;
+
+            var response = await Http.PostAsJsonAsync("http://localhost:5106/api/Venta", oVentaData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                mensajeExito = "Venta creada con éxito!";
+                mensajeError = "";
+
+                await JS.InvokeVoidAsync("alert", "Venta creada con éxito!");
+
+                // Reiniciar los datos
+                oVentaData = new VentaData();
+                productosVendidos = new List<ProductoVendidoData>(); // Reiniciar la lista de productos vendidos
+                AgregarProductoVendido(); // Agregar un nuevo campo para un producto
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                mensajeError = "Error al crear la venta, verifique los datos.";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error: {ex.Message}";
+            mensajeExito = "";
+        }
+    }
 }

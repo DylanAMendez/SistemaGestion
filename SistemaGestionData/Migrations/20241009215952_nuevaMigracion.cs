@@ -71,7 +71,7 @@ namespace SistemaGestionData.Migrations
                 table: "ProductosVendidos",
                 type: "int",
                 nullable: true);
-
+            
             migrationBuilder.AlterColumn<string>(
                 name: "Descripcion",
                 table: "Productos",

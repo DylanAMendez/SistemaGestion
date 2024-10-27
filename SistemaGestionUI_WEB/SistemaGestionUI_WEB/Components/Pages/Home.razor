@@ -2,6 +2,7 @@
 
 <PageTitle>Home</PageTitle>
 
+<br />
 
 @if (mensajeDeBienvenida == "")
 {
@@ -9,12 +10,47 @@
 }
 else
 {
-    <h1>Hello, @mensajeDeBienvenida!</h1>
+    <h1 style="text-align:center;">@mensajeDeBienvenida</h1>
 }
 
-Welcome to your new app.
+<br /><br />
 
+<h3 style="text-align:center;">¿Que quieres visitar?</h3>
 
+<br /><br />
+
+<div style="display:flex; flex-direction:row; justify-content: center;">
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+    <a>
+        <button>asd</button>
+    </a>
+</div>
 
 
 @code {
@@ -22,13 +58,29 @@ Welcome to your new app.
     [Parameter]
     public int IDUsuario { get; set; }
 
+    [Inject]
+    private HttpClient Http { get; set; }
+
     string mensajeDeBienvenida = "";
+    string nombreDeUsuarioActual = "";
+    UsuarioData usuarioActual = new UsuarioData();
 
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
 
-        mensajeDeBienvenida = "Hola bienvenido";
+        await CargarUsuario();
+
+        mensajeDeBienvenida = $"Hola {nombreDeUsuarioActual}, bienvenido!";
     }
+
+    private async Task CargarUsuario()
+    {
+        var usuario = await Http.GetStringAsync($"http://localhost:5106/api/Usuario/{IDUsuario}");
+        usuarioActual = JsonSerializer.Deserialize<UsuarioData>(usuario);
+
+       nombreDeUsuarioActual = usuarioActual.NombreUsuario;
+    }
+
 }

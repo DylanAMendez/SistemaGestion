@@ -22,7 +22,7 @@ namespace SistemaGestionData.Models
 
         [Required(ErrorMessage = "El campo Nombre de Usuario es requerido.")]
         [MaxLength(100, ErrorMessage = "El Nombre de Usuario no puede tener más de 100 caracteres.")]
-        [JsonPropertyName("nombreUsuario")]
+        [JsonPropertyName("NombreUsuario")]
         public string NombreUsuario { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El campo Contraseña es requerido.")]

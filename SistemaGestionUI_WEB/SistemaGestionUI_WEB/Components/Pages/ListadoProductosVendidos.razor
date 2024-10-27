@@ -1,0 +1,53 @@
+﻿@page "/TraerProductosVendidos"
+
+<h3>Productos Vendidos</h3>
+
+@if (lsProductosQueSeVendieron.Any())
+{
+    <ul>
+        @foreach (var producto in lsProductosQueSeVendieron)
+        {
+            <li>
+                <p><strong>Descripcion:</strong> @producto.Descripcion</p>
+                <p><strong>Categoria:</strong> @producto.Categoria</p>
+                <p><strong>Precio vendido:</strong> @producto.PrecioVenta</p>
+                <p><strong>Stock restante:</strong> @producto.Stock</p>
+            </li>
+
+            <hr />
+        }
+    </ul>
+}
+else
+{
+    <p>No hay productos vendidos.</p>
+}
+
+@code
+{
+    [Inject]
+    private HttpClient Http { get; set; }
+
+    List<ProductoVendidoData> lsProductoVendido = new List<ProductoVendidoData>();
+    List<ProductoData> lsProductos = new List<ProductoData>();
+
+    List<ProductoData> lsProductosQueSeVendieron = new List<ProductoData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarVentas();
+    }
+
+    private async Task CargarVentas()
+    {
+        var todosLosProductos = await Http.GetStringAsync("http://localhost:5106/api/Productos");
+        lsProductos = JsonSerializer.Deserialize<List<ProductoData>>(todosLosProductos);
+
+        var todasLosProductosVendidos = await Http.GetStringAsync("http://localhost:5106/api/ProductoVendido");
+        lsProductoVendido = JsonSerializer.Deserialize<List<ProductoVendidoData>>(todasLosProductosVendidos);
+
+        lsProductosQueSeVendieron = lsProductos
+            .Where(producto => lsProductoVendido.Any(x => x.IdProducto == producto.Id))
+            .ToList();
+    }
+}

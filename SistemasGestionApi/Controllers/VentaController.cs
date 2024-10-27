@@ -42,6 +42,7 @@ namespace SistemasGestionApi.Controllers
         public ActionResult<VentaData> CrearVenta([FromBody] VentaData venta)
         {
             var ventaCreada = _ventaBussiness.CrearVenta(venta);
+
             var productosVendidos = venta.ProductosVendidos;
 
             ProductoVendidoBussiness _productoVendidoBussiness = new ProductoVendidoBussiness();
@@ -49,18 +50,26 @@ namespace SistemasGestionApi.Controllers
 
             foreach (var productoVendido in productosVendidos)
             {
-                //productoVendido.IdVenta = ventaCreada.Id;
+                productoVendido.IdVenta = ventaCreada.Id;
 
                 _productoVendidoBussiness.CrearProductoVendido(productoVendido);
 
                 var producto = _productoBussiness.ObtenerUnProducto(productoVendido.IdProducto);
-                producto.Stock -= productoVendido.stock;
 
-                _productoBussiness.ModificarUnProducto(producto.Id, producto);
+                if (producto != null)
+                {
+                    if (producto.Stock > 0)
+                    {
+                        producto.Stock -= productoVendido.stock;
+                    }
+
+                    _productoBussiness.ModificarUnProducto(producto.Id, producto);
+                }
             }
 
             return CreatedAtAction(nameof(CrearVenta), new { id = ventaCreada.Id }, ventaCreada);
         }
+
 
 
 

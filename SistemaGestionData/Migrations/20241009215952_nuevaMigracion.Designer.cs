@@ -71,7 +71,7 @@ namespace SistemaGestionData.Migrations
                     b.Property<int>("IdProducto")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdVenta")
+                    b.Property<int>("VentaDataId")
                         .HasColumnType("int");
 
                     b.Property<int?>("VentaDataId")
