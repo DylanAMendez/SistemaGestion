@@ -67,6 +67,9 @@
     <p style="text-align:center;" class="text-success">@mensajeExito</p>
 }
 
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
+
+
 @code {
     [Parameter]
     public int IDUsuario { get; set; }
@@ -103,6 +106,11 @@
     private void AgregarProductoVendido()
     {
         productosVendidos.Add(new ProductoVendidoData()); // Agregamos un nuevo producto vendido vacío
+    }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
     }
 
     private async Task CrearNuevaVenta()

@@ -1,4 +1,6 @@
 ﻿@page "/TraerProductosVendidos"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <h3>Productos Vendidos</h3>
 
@@ -23,6 +25,9 @@ else
     <p>No hay productos vendidos.</p>
 }
 
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
+
 @code
 {
     [Inject]
@@ -36,6 +41,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         await CargarVentas();
+    }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
     }
 
     private async Task CargarVentas()

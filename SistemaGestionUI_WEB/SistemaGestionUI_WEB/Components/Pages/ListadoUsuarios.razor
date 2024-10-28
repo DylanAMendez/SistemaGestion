@@ -1,5 +1,6 @@
 ﻿@page "/ListadoUsuarios"
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <h3>ListadoUsuarios</h3>
 
@@ -27,6 +28,9 @@ else
 {
     <p>No hay usuarios disponibles.</p>
 }
+
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
 
 @code
 {
@@ -62,4 +66,10 @@ else
             await CargarUsuarios();
         }
     }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
+    }
+
 }

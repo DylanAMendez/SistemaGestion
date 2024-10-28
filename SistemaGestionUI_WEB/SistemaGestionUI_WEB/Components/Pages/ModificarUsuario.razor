@@ -1,5 +1,6 @@
 ﻿@page "/ModificarUsuario/{IDUsuario:int}"
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <h3>Modificar Usuario</h3>
 
@@ -30,10 +31,16 @@
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </EditForm>
 
+
 @if (datosGuardados)
 {
     <p>Datos del usuario modificados correctamente.</p>
 }
+
+
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
+
 
 @code {
     [Parameter]
@@ -47,14 +54,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Obtener datos del usuario usando la API
         var res = await Http.GetStringAsync($"http://localhost:5106/api/usuario/{IDUsuario}");
         usuarioData = JsonSerializer.Deserialize<UsuarioData>(res);
     }
 
     private async Task GuardarCambios()
     {
-        // Lógica para guardar cambios en la API
         var json = JsonSerializer.Serialize(usuarioData);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -69,5 +74,10 @@
             datosGuardados = false;
             Console.WriteLine("Error al modificar los datos del usuario.");
         }
+    }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
     }
 }

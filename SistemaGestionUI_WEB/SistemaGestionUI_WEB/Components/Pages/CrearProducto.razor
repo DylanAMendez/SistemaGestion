@@ -71,6 +71,9 @@
     <p class="text-success">@mensajeExito</p>
 }
 
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
+
 @code {
     private ProductoData nuevoProducto = new ProductoData();
     private string mensajeError = "";
@@ -80,6 +83,11 @@
     private HttpClient Http { get; set; }
     [Inject]
     private NavigationManager navegar { get; set; }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
+    }
 
     private async Task CrearNuevoProducto()
     {

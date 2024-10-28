@@ -1,5 +1,6 @@
 ﻿@page "/TraerVentas"
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 
 
 <h3 style="display:flex; justify-content: center;">Ventas</h3>
@@ -27,6 +28,9 @@ else
     <p>No hay ventas disponibles.</p>
 }
 
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
+
 @code
 {
     [Inject]
@@ -53,4 +57,10 @@ else
             await CargarVentas();
         }
     }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
+    }
+
 }

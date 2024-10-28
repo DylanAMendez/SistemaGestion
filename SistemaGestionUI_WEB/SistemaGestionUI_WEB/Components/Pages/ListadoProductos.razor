@@ -1,7 +1,6 @@
 ﻿@page "/ListadoProductos"
 @rendermode InteractiveServer
-
-<h3>ListadoUsuarios</h3>
+@inject IJSRuntime JS
 
 @if (lsProductos.Any())
 {
@@ -30,6 +29,9 @@ else
 {
     <p>No hay productos disponibles.</p>
 }
+
+
+<button class="btn btn-secondary" @onclick="VolverAtras">Volver</button>
 
 @code
 {
@@ -65,4 +67,10 @@ else
             await CargarProductos();
         }
     }
+
+    private void VolverAtras()
+    {
+        JS.InvokeVoidAsync("history.back");
+    }
+
 }
