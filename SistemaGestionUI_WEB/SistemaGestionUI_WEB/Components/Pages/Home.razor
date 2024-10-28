@@ -13,43 +13,80 @@ else
     <h1 style="text-align:center;">@mensajeDeBienvenida</h1>
 }
 
-<br /><br />
+<br />
+<br />
 
-<h3 style="text-align:center;">¿Que quieres visitar?</h3>
+<h2 style="text-align:center;">¿Que quieres visitar?</h2>
 
-<br /><br />
+<br />
+<br />
 
-<div style="display:flex; flex-direction:row; justify-content: center;">
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
-    <a>
-        <button>asd</button>
-    </a>
+<style>
+    a, h3 {
+        text-align: center;
+        text-decoration: none;
+        border-bottom: solid;
+        margin-bottom: 40px;
+    }
+</style>
+
+<div style="display:flex; flex-direction:row; justify-content: space-evenly;">
+
+    <div>
+        <a class="btn-outline-success" href="/ListadoUsuarios">
+            <h3>Lista de usuarios</h3>
+        </a>
+
+
+        <a class="btn-outline-warning" href="@($"ModificarUsuario/{IDUsuario}")">
+            
+
+            <h3>Modificacion de usuario</h3>
+
+
+        </a>
+    </div>
+
+    <div>
+
+        <a class="btn-outline-info" href="/ListadoProductos">
+
+            <h3>Listado y modificacion de productos</h3>
+
+        </a>
+
+        <a class="btn-outline-success" href="/CrearProducto">
+
+            <h3>Creacion de producto</h3>
+
+        </a>
+
+ 
+
+    </div>
+
+    <div>
+
+        <a class="btn-outline-success" href="/TraerVentas">
+
+            <h3>Listado de ventas</h3>
+
+        </a>
+
+        <a class="btn-outline-warning" href="@($"CargarVenta/{IDUsuario}")">
+
+            <h3>Cargar venta</h3>
+
+        </a>
+
+        <a class="btn-outline-success" href="/TraerProductosVendidos">
+
+            <h3>Listado de productos vendidos</h3>
+
+        </a>
+
+    </div>
+
 </div>
 
 
@@ -80,7 +117,7 @@ else
         var usuario = await Http.GetStringAsync($"http://localhost:5106/api/Usuario/{IDUsuario}");
         usuarioActual = JsonSerializer.Deserialize<UsuarioData>(usuario);
 
-       nombreDeUsuarioActual = usuarioActual.NombreUsuario;
+        nombreDeUsuarioActual = usuarioActual.NombreUsuario;
     }
 
 }
